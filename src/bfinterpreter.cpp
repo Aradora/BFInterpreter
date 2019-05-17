@@ -1,21 +1,34 @@
 #include "bfinterpreter.h"
 #include <iostream>
 #include <cstring>
+#include <stdio.h>
+#include <fstream>
 
-BFInterpreter::BFInterpreter(unsigned int howMuchMemory){
-	memory = new unsigned char[howMuchMemory]();
+BFInterpreter::BFInterpreter(){
+	memory = nullptr;
 	program = nullptr;
 	outputPath = nullptr;
-	memoryPointer = memory;
-
+	memoryPointer = nullptr;
 }
 
-BFInterpreter::BFInterpreter():BFInterpreter(30000){};
+BFInterpreter::~BFInterpreter(){ delete[] memory; }
+//there should be also internal function working as parser for input params and as courtyard for next actions. Currently main does that.
+
+int BFInterpreter::ParseInput(int argc, char** argv){
+	for(int i = 0 ; i < argc; i++){
+
+
+
+	}
+
+
+
+}
 
 
 void BFInterpreter::ExecuteProgram(){
 	memoryPointer = memory;
-	while(*program){ //im evil person
+	while(*program){ //i'm evil person
 		switch(*program){
 			case '>':
 				++memoryPointer;
@@ -86,9 +99,24 @@ bool BFInterpreter::ParseProgram(char* in){
 	}
 	return true;
 }
+//public interface
+//
+
+bool BFInterpreter::ReadProgram(char* program){
+	return (this->ParseProgram(program))?true : false ;
+}
 
 
-
+bool BFInterpreter::ReadProgramPath(char* path){
+/*	std::ifstream file;
+	file.open(program);	
+	if(!file.is_open())
+		return false;
+	file.get
+*/
+	
+	return (strcmp(path,"")==0)?false:true;
+}
 
 void BFInterpreter::Help(){
 	std::cout<<"BF interpreter \n\r -i <code>  to interpret\n\r"
@@ -96,37 +124,3 @@ void BFInterpreter::Help(){
 		" -o <file> to write output to file instead of console";
 
 }
-
-void BFInterpreter::ParseInput(char* input){
-	bool wasInput=false,wasOutput=false; //to eliminate possibility of multiple arguments of the same type
-	char *inputDash = std::strtok(input, "-if");
-	if(inputDash != nullptr){
-		//TODO parsing file;
-		wasInput = true;
-		std::cout << "idk how to parse yet";
-		return;
-	
-	}
-	else{
-		inputDash = std::strtok(input,"-i");
-		if(inputDash == nullptr){
-			std::cout<< "No input parameter \r\n";
-			this->Help();
-			return;
-		}
-		else{
-		//parsing program given in cli
-		this->ParseProgram(inputDash);
-		}
-	}
-	if(std::strtok(input,"-o")){
-		//TODO getting path to output file
-		std::cout << "idk how to output file yet";
-		wasOutput = true;
-		return;
-
-	}
-
-}
-
-
